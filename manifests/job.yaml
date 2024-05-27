@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: 'indexed-job'
+spec:
+  completions: 1 ## CHANGE HERE
+  parallelism: 1 ## CHANGE HERE
+  completionMode: Indexed
+  template:
+    metadata:
+      labels:
+        parallelism: "1" ## CHANGE HERE
+    spec:
+      nodeSelector:
+        iam.gke.io/gke-metadata-server-enabled: "true"
+      serviceAccountName: indexed-job-sa
+      restartPolicy: OnFailure
+      containers:
+      - name: 'worker'
+        image: <your image> ## CHANGE HERE
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: PARALLELISM
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['parallelism']

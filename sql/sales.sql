@@ -1,0 +1,6 @@
+CREATE TABLE Sales (
+    Id STRING(36) DEFAULT (GENERATE_UUID()),
+    Name STRING(MAX),
+    IsDone Bool DEFAULT (False)
+) PRIMARY KEY (Id);
+
